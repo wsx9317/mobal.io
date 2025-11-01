@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobal/Screen/Home.dart';
 import 'package:mobal/Service/status/CheckboxProvider.dart';
 import 'package:mobal/Service/status/InputProvider.dart';
@@ -11,8 +10,9 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: ".env");
-  var mainpage = dotenv.env['MAIN'];
+  // .env 사용 제거 — GitHub Pages에서는 파일 접근 불가
+  const mainpage = "HOME";
+
   runApp(
     MultiProvider(
       providers: [
@@ -25,7 +25,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final String? mainPage;
+  final String mainPage;
   const MyApp({super.key, required this.mainPage});
 
   @override
@@ -49,15 +49,16 @@ class MyApp extends StatelessWidget {
             PointerDeviceKind.unknown,
           },
         ),
-        title: 'Sosang',
+        title: 'Mobal',
         theme: ThemeData(pageTransitionsTheme: _removeTransitions()),
-        initialRoute: "/${mainPage!}",
+        // .env 대신 직접 지정한 mainPage 사용
+        initialRoute: "/$mainPage",
         debugShowCheckedModeBanner: false,
-        routes: {"/$PAGE_HOME_PAGE": (context) => Home()},
+        routes: {"/$PAGE_HOME_PAGE": (context) => const Home()},
         home: Builder(
           builder: (BuildContext context) {
             ScreenUtil.init(context);
-            return Home();
+            return const Home();
           },
         ),
       ),
